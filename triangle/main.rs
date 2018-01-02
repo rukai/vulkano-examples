@@ -57,6 +57,7 @@ use vulkano::sync::now;
 use vulkano::sync::GpuFuture;
 use vulkano::image::AttachmentImage;
 use vulkano::image::ImageAccess;
+use vulkano::format::Format;
 
 use std::iter;
 use std::sync::Arc;
@@ -264,11 +265,23 @@ void main() {
                 store: Store,
                 format: swapchain.format(),
                 samples: 1,
+            },
+            multisampled_depth: {
+                load:    Clear,
+                store:   DontCare,
+                format:  Format::D16Unorm,
+                samples: 4,
+            },
+            resolve_depth: {
+                load:    DontCare,
+                store:   Store,
+                format:  Format::D16Unorm,
+                samples: 1,
             }
         },
         pass: {
             color: [multisample_color],
-            depth_stencil: {},
+            depth_stencil: {multisampled_depth},
             resolve: [resolve_color],
         }
     ).unwrap());

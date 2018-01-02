@@ -1,0 +1,63 @@
+Using device: GeForce GTX 960 (type: DiscreteGpu)
+thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', /checkout/src/libcore/option.rs:335:21
+stack backtrace:
+   0: std::sys::unix::backtrace::tracing::imp::unwind_backtrace
+             at /checkout/src/libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
+   1: std::sys_common::backtrace::print
+             at /checkout/src/libstd/sys_common/backtrace.rs:68
+             at /checkout/src/libstd/sys_common/backtrace.rs:57
+   2: std::panicking::default_hook::{{closure}}
+             at /checkout/src/libstd/panicking.rs:381
+   3: std::panicking::default_hook
+             at /checkout/src/libstd/panicking.rs:397
+   4: std::panicking::rust_panic_with_hook
+             at /checkout/src/libstd/panicking.rs:577
+   5: std::panicking::begin_panic
+             at /checkout/src/libstd/panicking.rs:538
+   6: std::panicking::begin_panic_fmt
+             at /checkout/src/libstd/panicking.rs:522
+   7: rust_begin_unwind
+             at /checkout/src/libstd/panicking.rs:498
+   8: core::panicking::panic_fmt
+             at /checkout/src/libcore/panicking.rs:71
+   9: core::panicking::panic
+             at /checkout/src/libcore/panicking.rs:51
+  10: <core::option::Option<T>>::unwrap
+             at /checkout/src/libcore/macros.rs:20
+  11: triangle::main::scope::attachment_layouts
+             at /home/rubic/Projects/Crates/vulkano-examples/<ordered_passes_renderpass macros>:137
+  12: triangle::main::scope::attachment
+             at /home/rubic/Projects/Crates/vulkano-examples/<ordered_passes_renderpass macros>:49
+  13: <triangle::main::scope::CustomRenderPassDesc as vulkano::framebuffer::desc::RenderPassDesc>::attachment_desc
+             at /home/rubic/Projects/Crates/vulkano-examples/<ordered_passes_renderpass macros>:29
+  14: <vulkano::framebuffer::desc::RenderPassDescAttachments<'a, R> as core::iter::iterator::Iterator>::next
+             at /home/rubic/.cargo/registry/src/github.com-1ecc6299db9ec823/vulkano-0.7.1/src/framebuffer/desc.rs:364
+  15: core::iter::iterator::Iterator::try_fold
+             at /checkout/src/libcore/iter/iterator.rs:1406
+  16: <core::iter::Enumerate<I> as core::iter::iterator::Iterator>::try_fold
+             at /checkout/src/libcore/iter/mod.rs:1639
+  17: core::iter::iterator::Iterator::all
+             at /checkout/src/libcore/iter/iterator.rs:1526
+  18: <vulkano::framebuffer::sys::RenderPass<D>>::new
+             at /home/rubic/.cargo/registry/src/github.com-1ecc6299db9ec823/vulkano-0.7.1/src/framebuffer/sys.rs:73
+  19: vulkano::framebuffer::desc::RenderPassDesc::build_render_pass
+             at /home/rubic/.cargo/registry/src/github.com-1ecc6299db9ec823/vulkano-0.7.1/src/framebuffer/desc.rs:126
+  20: triangle::main
+             at triangle/main.rs:255
+  21: std::rt::lang_start::{{closure}}
+             at /checkout/src/libstd/rt.rs:74
+  22: std::panicking::try::do_call
+             at /checkout/src/libstd/rt.rs:59
+             at /checkout/src/libstd/panicking.rs:480
+  23: __rust_maybe_catch_panic
+             at /checkout/src/libpanic_unwind/lib.rs:101
+  24: std::rt::lang_start_internal
+             at /checkout/src/libstd/panicking.rs:459
+             at /checkout/src/libstd/panic.rs:365
+             at /checkout/src/libstd/rt.rs:58
+  25: std::rt::lang_start
+             at /checkout/src/libstd/rt.rs:74
+  26: main
+  27: __libc_start_main
+  28: _start
+
