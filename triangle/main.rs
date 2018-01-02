@@ -55,6 +55,8 @@ use vulkano::swapchain::AcquireError;
 use vulkano::swapchain::SwapchainCreationError;
 use vulkano::sync::now;
 use vulkano::sync::GpuFuture;
+use vulkano::image::AttachmentImage;
+use vulkano::image::ImageAccess;
 
 use std::iter;
 use std::sync::Arc;
@@ -251,29 +253,23 @@ void main() {
     // where the colors, depth and/or stencil information will be written.
     let render_pass = Arc::new(single_pass_renderpass!(device.clone(),
         attachments: {
-            // `color` is a custom name we give to the first and only attachment.
-            color: {
-                // `load: Clear` means that we ask the GPU to clear the content of this
-                // attachment at the start of the drawing.
+            multisample_color: {
                 load: Clear,
-                // `store: Store` means that we ask the GPU to store the output of the draw
-                // in the actual image. We could also ask it to discard the result.
-                store: Store,
-                // `format: <ty>` indicates the type of the format of the image. This has to
-                // be one of the types of the `vulkano::format` module (or alternatively one
-                // of your structs that implements the `FormatDesc` trait). Here we use the
-                // generic `vulkano::format::Format` enum because we don't know the format in
-                // advance.
+                store: DontCare,
                 format: swapchain.format(),
-                // TODO:
+                samples: 4,
+            },
+            resolve_color: {
+                load: DontCare,
+                store: Store,
+                format: swapchain.format(),
                 samples: 1,
             }
         },
         pass: {
-            // We use the attachment named `color` as the one and only color attachment.
-            color: [color],
-            // No depth-stencil attachment is indicated with empty brackets.
-            depth_stencil: {}
+            color: [multisample_color],
+            depth_stencil: {},
+            resolve: [resolve_color],
         }
     ).unwrap());
 
@@ -366,7 +362,9 @@ void main() {
         // recreate framebuffers as well.
         if framebuffers.is_none() {
             let new_framebuffers = Some(images.iter().map(|image| {
+                let multisample_image = AttachmentImage::transient_multisampled(device.clone(), image.dimensions().width_height(), 4, image.format()).unwrap();
                 Arc::new(Framebuffer::start(render_pass.clone())
+                         .add(multisample_image.clone()).unwrap()
                          .add(image.clone()).unwrap()
                          .build().unwrap())
             }).collect::<Vec<_>>());
